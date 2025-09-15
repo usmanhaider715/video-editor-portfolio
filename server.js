@@ -36,33 +36,6 @@ app.get('/api/projects', (req, res) => {
     res.json(projects);
 });
 
-// Contact form email handler
-const nodemailer = require('nodemailer');
-app.use(express.json());
-app.post('/api/contact', async (req, res) => {
-    const { name, email, message } = req.body;
-    // Configure transporter (use your real credentials)
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'usmanhaiderkhokhar715@gmail.com', // your Gmail address
-            pass: 'hnzeetgnbhfwbaso' // use Gmail App Password, not your real password
-        }
-    });
-    const mailOptions = {
-        from: email,
-        to: 'usmanhaiderkhokhar715@gmail.com',
-        subject: `Portfolio Contact Form: ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
-    };
-    try {
-        await transporter.sendMail(mailOptions);
-        res.json({ message: 'Thank you for your message! I will get back to you soon.' });
-    } catch (error) {
-        console.error('Error sending email:', error);
-        res.status(500).json({ message: 'Failed to send email. Please try again later.' });
-    }
-});
 
 // Start the server on port 3000
 const PORT = 3000;
