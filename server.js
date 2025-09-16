@@ -1,31 +1,42 @@
+require('dotenv').config();
 const express = require('express');
-const path = require('path');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
-const session = require('express-session');
+const path = require('path');
 
 const app = express();
 
-// Database connection
+// Cloud DB pool
 const pool = new Pool({
-    user: 'portfolio_user',
-    host: 'localhost',
-    database: 'portfolio_db',
-    password: 'Best@123',
-    port: 5432,
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
 });
 
-// Middleware
+// Session store with PostgreSQL
+const pgSessionStore = new pgSession({
+    pool: pool,
+    tableName: 'sessions',
+    createTableIfMissing: true
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'your_session_secret',
+    store: pgSessionStore,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 3600000 }
+    cookie: { 
+        maxAge: 3600000,
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        sameSite: 'lax'
+    }
 }));
 
-// Serve static files from 'public' with video MIME types
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public'), {
     setHeaders: (res, path) => {
         if (path.endsWith('.mp4')) {
@@ -43,16 +54,11 @@ const requireAuth = (req, res, next) => {
     }
 };
 
-// Redirect root to signin if not logged in
-app.get('/', (req, res) => {
-    if (req.session.userId) {
-        res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    } else {
-        res.redirect('/signin.html');
-    }
+// Routes
+app.get('/', requireAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Signup route
 app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -72,7 +78,6 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// Login route
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -92,46 +97,27 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Logout route
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/signin.html');
 });
 
-// API for projects
 app.get('/api/projects', requireAuth, (req, res) => {
     const projects = [
-        {
-            id: 1,
-            title: 'Cinematic Short Film',
-            description: 'A cinematic short film edited in Final Cut Pro.',
-            videoUrl: '/videos/video1.mp4'
-        },
-        {
-            id: 2,
-            title: 'Commercial Ad',
-            description: 'Commercial ad with dynamic transitions in Premiere Pro.',
-            videoUrl: '/videos/video2.mp4'
-        },
-        {
-            id: 3,
-            title: 'Music Video',
-            description: 'Color-graded music video in DaVinci Resolve.',
-            videoUrl: '/videos/video3.mp4'
-        }
+        { id: 1, title: 'Cinematic Short Film', description: 'A cinematic short film edited in Final Cut Pro.', videoUrl: '/videos/video1.mp4' },
+        { id: 2, title: 'Commercial Ad', description: 'Commercial ad with dynamic transitions in Premiere Pro.', videoUrl: '/videos/video2.mp4' },
+        { id: 3, title: 'Music Video', description: 'Color-graded music video in DaVinci Resolve.', videoUrl: '/videos/video3.mp4' }
     ];
     res.json(projects);
 });
 
-// Serve signin and signup pages
 app.get('/signin.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signin.html'));
 });
+
 app.get('/signup.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// Vercel serverless export
+module.exports = app;
