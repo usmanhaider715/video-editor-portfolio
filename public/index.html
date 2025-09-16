@@ -3,66 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Video Editor Portfolio</title>
+    <title>Professional Video Editor Portfolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <nav>
-            <div class="logo">Video Editor</div>
-            <ul class="nav-links">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#contact">Contact</a></li>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/api/projects">Projects</a></li>
+                <li><a href="/logout">Logout</a></li>
             </ul>
         </nav>
     </header>
+    <main>
+        <section id="hero">
+            <h1>Professional Video Editor</h1>
+            <p>Crafting stunning visuals with Final Cut Pro, Premiere Pro, and DaVinci Resolve</p>
+            <a href="#projects" class="cta">View My Work</a>
+        </section>
 
-    <section id="hero">
-        <h1>Professional Video Editor</h1>
-        <p>Crafting stunning visuals with Final Cut Pro, Premiere Pro, and DaVinci Resolve</p>
-        <a href="#portfolio" class="cta-btn">View My Work</a>
-    </section>
+        <section id="about">
+            <h2>About Me</h2>
+            <p>I'm a passionate video editor with over 5 years of experience, specializing in creating cinematic masterpieces using industry-leading tools like Final Cut Pro, Premiere Pro, and DaVinci Resolve. My work focuses on storytelling, seamless transitions, and vibrant color grading to bring ideas to life.</p>
+        </section>
 
-    <section id="about">
-        <h2>About Me</h2>
-        <p>I'm a passionate video editor with over 5 years of experience, specializing in creating cinematic masterpieces using industry-leading tools like Final Cut Pro, Premiere Pro, and DaVinci Resolve. My work focuses on storytelling, seamless transitions, and vibrant color grading to bring ideas to life.</p>
-    </section>
-
-    <section id="skills">
-        <h2>Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-card">
+        <section id="skills">
+            <h2>Skills</h2>
+            <div class="skill-item">
                 <h3>Final Cut Pro</h3>
                 <p>Expert in editing, motion graphics, and audio integration.</p>
             </div>
-            <div class="skill-card">
+            <div class="skill-item">
                 <h3>Premiere Pro</h3>
                 <p>Proficient in dynamic editing and multi-camera workflows.</p>
             </div>
-            <div class="skill-card">
+            <div class="skill-item">
                 <h3>DaVinci Resolve</h3>
                 <p>Advanced color grading and post-production mastery.</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="portfolio">
-        <h2>Portfolio</h2>
-        <div class="portfolio-grid" id="portfolio-grid"></div>
-    </section>
+        <section id="projects">
+            <h2>Projects</h2>
+            <div id="project-list"></div>
+        </section>
 
-    <section id="contact">
-        <h2>Contact Me</h2>
-        <p>Let's create something amazing together! Reach out via email, contact/WhatsApp, or the form below.</p>
-        <div class="contact-links">
-            <a href="mailto:usmanhaiderkhokhar715@gmail.com">Email: usmanhaiderkhokhar715@gmail.com</a>
-            <a href="https://wa.me/+923097213383" target="_blank">Contact/WhatsApp: +923097213383</a>
-       
-    </section>
-
+        <section id="contact">
+            <h2>Contact Me</h2>
+            <p>Let's create something amazing together! Reach out via email, contact/WhatsApp, or the form below.</p>
+            <form id="contact-form">
+                <input type="text" id="contact-name" placeholder="Your Name" required>
+                <input type="email" id="contact-email" placeholder="Your Email" required>
+                <textarea id="contact-message" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>

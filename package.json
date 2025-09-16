@@ -1,16 +1,15 @@
 {
   "name": "video-editor-portfolio",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
-    "nodemailer": "^7.0.6"
+    "pg": "^8.11.3",
+    "bcrypt": "^5.1.1",
+    "express-session": "^1.18.0"
+    
   }
 }
